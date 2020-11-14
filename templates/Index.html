@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthGuard</title>
+    {% load static %}
+    <link rel="icon"
+          type="image/svg"
+          href="{% static 'MainWebApp/img/Logo.svg' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="{% static 'MainWebApp/css/Style.css' %}">
+    <link rel="stylesheet" href="{% static 'MainWebApp/css/Resp.css' %}">
+</head>
+<body>
+    <nav class="navbar">
+        <img src="{% static 'MainWebApp/img/Logo.png' %}" alt="HealthGuardLogo">
+        <ul class="nav-items-box">
+            <li class="nav-link"><a href="#">Home</a></li>
+            <li class="nav-link"><a href="#">About</a></li>
+            <li class="nav-link"><a href="#">Test</a></li>
+            <li class="nav-link"><a href="#">Medicine</a></li>
+        </ul>
+    </nav>
+    <section class="middle-section">
+        <div class="img-section">
+            <img src="{% static 'MainWebApp/img/DoctorHome.jpg' %}" alt="Doctor">
+        </div>
+        <div class="form-section">
+            <div class="lsforms">
+                <div class="form-toggle-group">
+                    <div class="login-toggle" onclick="loginclick()">Login</div>
+                    <div class="signup-toggle" onclick="signupclick()">Signup</div>
+                </div>
+                <div id="login-form">
+                    <br>
+                    <form>
+                        <div class="input-box">
+                            <input type="text" name="email" class="inp-field" required>
+                            <span class="placeholder">Email</span>
+                        </div>
+                        <br>
+                        <div class="input-box">
+                            <input type="password" name="password" class="inp-field" required>
+                            <span class="placeholder">Password</span>
+                        </div>
+                        <br>
+                        <div class="input-box">
+                            <input type="submit" value="LogIn">
+                        </div>
+                    </form>
+                </div>
+                <div id="signup-form">
+                    <br>
+                    <form>
+                        <div class="input-box">
+                            <input type="text" name="email" class="inp-field" required>
+                            <span class="placeholder">Email</span>
+                        </div>
+                        <br>
+                        <div class="input-box">
+                            <input type="text" name="fname" class="inp-field" required>
+                            <span class="placeholder">Full name</span>
+                        </div>
+                        <br>
+                        <div class="input-box">
+                            <span class="input-group-header">Date Of Birth</span>
+                            <input type="date" name="dob" class="input-group-header">
+                            <br>
+                            <br>
+                            <span class="input-group-header">Gender</span>
+                            <div class="input-group-header">
+                                <input type="radio" name="gender" value="male" checked>
+                                <span class="input-group-header">Male</span>
+                            </div>
+                            <div class="input-group-header">
+                                <input type="radio" name="gender" value="female">
+                                <span class="input-group-header">Female</span>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="input-box">
+                            <input type="password" name="password" class="inp-field" required>
+                            <span class="placeholder">Password</span>
+                        </div>
+                        <br>
+                        <div class="input-box">
+                            <input type="password" name="cpassword" class="inp-field" required>
+                            <span class="placeholder">Confirm Password</span>
+                        </div>
+                        <br>
+                        <div class="input-box">
+                            <input type="submit" value="SignUp">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer class="dark-footer">
+        Copyright &copy; HealthGuard
+    </footer>
+    <script src="{% static 'MainWebApp/js/home-toggle.js' %}"></script>
+</body>
+</html>

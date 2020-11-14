@@ -1,0 +1,38 @@
+@media only screen and (max-width: 425px){
+    .navbar{
+        flex-direction: column;
+    }
+    .nav-link a{
+        font-size: 1rem;
+    }
+    .navbar img{
+        width: 50%;
+    }
+    .middle-section{
+        min-height: calc(100vh - 175px);
+        flex-direction: column;
+        align-items: center;
+    }
+    .form-section{
+        width: 100%;
+    }
+    .form-toggle-group{
+        font-size: 1.5rem;
+    }
+}
+@media only screen and (min-width: 426px) and (max-width: 768px){
+    .navbar{
+        flex-direction: column;
+    }
+    .middle-section{
+        min-height: calc(100vh - 500px);
+        flex-direction: column;
+        align-items: center;
+    }
+    .form-section{
+        width: 100%;
+    }
+    .form-toggle-group{
+        font-size: 1.5rem;
+    }
+}

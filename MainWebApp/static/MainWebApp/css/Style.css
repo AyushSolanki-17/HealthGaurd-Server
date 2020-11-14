@@ -1,0 +1,178 @@
+:root{
+    --background-primary : #23CE6B;
+    --black : #000000;
+    --white : #FCFCFC;
+    --sec-green: #0C7C59;
+    --text-primary: #14213D;
+    --background-secondary: #FE5F55;
+}
+*{
+    margin: 0;
+    padding: 0;
+    max-width: 100%;
+    font-family: "Roboto", sans-serif;
+}
+html{
+    width: 100%;
+}
+body{
+    max-height: 100vh;
+}
+.navbar{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 2;
+}
+.navbar img{
+    width: 20%;
+    padding: 0.5%;
+}
+.nav-items-box{
+    list-style: none;
+    width: auto;
+    padding: 1%;
+}
+.nav-link{
+    float: left;
+}
+.nav-link a{
+    display: inline-block;
+    padding: 5px 15px;
+    text-decoration: none;
+    color: var(--text-primary);
+    font-size: 1.5rem;
+}
+.nav-link a:hover{
+    font-weight: bold;
+}
+.middle-section{
+    display: flex;
+    flex-direction: row;
+}
+.img-section{
+    width: 50%;
+}
+.img-section img{
+    width: 100%;
+}
+.form-section{
+    display: flex;
+    width: 50%;
+    justify-content: center;
+}
+.lsforms{
+    width: 75%;
+}
+.form-toggle-group{
+    display: flex;
+    flex-direction: row;
+    padding: 5%;
+    font-size: 2rem;
+    justify-content: space-between;
+}
+.login-toggle, .signup-toggle{
+    position: relative;
+    padding: 2.5% 5%;
+    width: 50%;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color .4s ease, color .4s ease;
+}
+.login-toggle{
+    background-color: var(--background-secondary);
+    color: var(--white);
+    border-radius: 50px 0px 0px 50px;
+}
+.signup-toggle{
+    background-color: var(--black);
+    color: var(--sec-green);
+    border-radius: 0px 50px 50px 0px;
+}
+#login-form{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 2%;
+    font-size: 1.5rem;
+}
+#signup-form{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    display: none;
+    padding: 2%;
+    font-size: 1.5rem;
+}
+.input-box{
+    position: relative;
+    margin: 1% 2.5%;
+}
+.inp-field {
+  position: relative;
+  outline: none;
+  border: none;
+  color: var(--text-primary);
+  font-size: 1.2rem;
+  width: 90%;
+  box-sizing: border-box;
+  border-width: 0;
+  border-bottom: 2px solid var(--sec-green);
+  padding: 1% 1%;
+}
+.placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 1.2rem;
+  transition: 0.5s;
+  pointer-events: none;
+}
+.inp-field:focus ~ .placeholder,.inp-field:valid ~ .placeholder{
+    top: -17px;
+    font-size: 1rem;
+    color: var(--sec-green);
+}
+.inp-field:focus {
+  border-bottom-color: var(--background-primary);
+}
+.input-group-header{
+    font-size: 1.2rem;
+    display: inline;
+    color: var(--text-primary);
+}
+.radio-group{
+    display: inline;
+    margin: 0.5% 2.5%;
+}
+.input-box input[type="date"], .input-box input[type="radio"], .input-group-header .input-group-header
+{
+    color: #4b83ea;
+    font-weight: bolder;
+}
+.input-box input[type="radio"]
+{
+    background-color: silver;
+}
+.input-box input[type="submit"]
+{
+    background-color: var(--background-primary);
+    border-radius: 15px;
+    color: var(--white);
+    outline: none;
+    border: none;
+    display: block;
+    width: 50%;
+    margin: 0.5% auto;
+    padding: 2%;
+    font-size: 1.2rem;
+}
+.dark-footer{
+    background-color: var(--black);
+    color: var(--white);
+    padding: 25px 50px;
+}
+
