@@ -15,7 +15,7 @@ import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+AUTH_USER_MODEL = 'MainWebApp.HealthGuardUser'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -26,7 +26,7 @@ SECRET_KEY = '+gih1w3)3y-p=viu^(q0&))+&23cvcxx4a!=v@gce%d!1)5gyk'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -39,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'MainWebApp.apps.MainwebappConfig',
+    'api.apps.ApiConfig',
+    'rest_framework',
+    'oauth2_provider'
 ]
 
 MIDDLEWARE = [
@@ -72,14 +75,28 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'HealthGuard.wsgi.application'
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+    ),
+}
+
+OAUTH2_PROVIDER = {
+    # this is the list of available scopes
+    'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups'}
+}
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'HealthGuard',
+        'USER': 'Ayush',
+        'PASSWORD': 'Ayush123',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
