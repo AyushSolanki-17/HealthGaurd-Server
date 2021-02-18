@@ -43,7 +43,7 @@ class UserChangeForm(forms.ModelForm):
 
     class Meta:
         model = HealthGuardUser
-        fields = ('email', 'password', 'fname', 'mobile', 'gender', 'dob', 'is_doctor', 'is_admin')
+        fields = ('email', 'password', 'fname', 'mobile', 'gender', 'is_admin')
 
     def clean_password(self):
         # Regardless of what the user provides, return the initial value.
@@ -60,12 +60,12 @@ class HealthGuardAdmin(BaseUserAdmin):
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
-    list_display = ('email', 'fname', 'gender', 'dob', 'is_doctor', 'is_admin')
+    list_display = ('email', 'fname', 'gender', 'dob', 'is_admin')
     list_filter = ('is_admin',)
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        ('Personal info', {'fields': ('fname', 'mobile', 'gender', 'dob', 'is_doctor')}),
-        ('Permissions', {'fields': ('is_admin',)}),
+        ('Personal info', {'fields': ('fname', 'mobile', 'gender', 'dob')}),
+        ('Permissions', {'fields': ('is_admin', 'groups', 'user_permissions')}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
     # overrides get_fieldsets to use this attribute when creating a user.
@@ -82,6 +82,4 @@ class HealthGuardAdmin(BaseUserAdmin):
 
 # Now register the new UserAdmin...
 admin.site.register(HealthGuardUser, HealthGuardAdmin)
-# ... and, since we're not using Django's built-in permissions,
-# unregister the Group model from admin.
-admin.site.unregister(Group)
+

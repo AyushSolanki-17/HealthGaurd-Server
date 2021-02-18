@@ -1,6 +1,7 @@
 from django.test import TestCase
 from .models import HealthGuardUser
 # Create your tests here.
+import requests
 
 
 class HealthGuardUserTestCase(TestCase):
@@ -9,6 +10,7 @@ class HealthGuardUserTestCase(TestCase):
                                             password='Ayush123', gender='M', dob='2002-11-18')
         HealthGuardUser.objects.create_user(email='admin@hg.com', fname='Ayush', mobile='7016769052',
                                             password='admin123', gender='M', dob='2002-11-18')
+
 
     def check_users(self):
         obj = HealthGuardUser.objects.get(email='admin@hg.com')

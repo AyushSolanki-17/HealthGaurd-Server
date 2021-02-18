@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 
 from . import views
 
@@ -8,4 +8,6 @@ urlpatterns = [
     path('token/', views.TokenApi.as_view(), name='token'),
     path('token/refresh/', views.RefreshTokenApi.as_view(), name='refresh'),
     path('token/revoke/', views.RevokeTokenApi.as_view(), name='revoke'),
+    path('register/doctor/', views.DoctorRegisterApi.as_view(), name='doctor_register'),
+    path('tests/', include('DiseasePrediction.urls', namespace='tests')),
 ]
