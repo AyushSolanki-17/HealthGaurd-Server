@@ -33,6 +33,8 @@ class TestReport(models.Model):
         ("general", "General"),
         ("dengue", "Dengue"),
         ("chikungunya", "Chikungunya"),
+        ("malaria", "Malaria"),
+        ("covid", "Covid")
     ]
     test_id = models.UUIDField(
         verbose_name='test ID',

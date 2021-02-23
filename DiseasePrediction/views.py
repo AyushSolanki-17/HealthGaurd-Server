@@ -7,38 +7,14 @@ import json
 import os
 import pickle
 import numpy as np
+from .MLmodels.description_generator import generate_report_description, generate_result, general_Result_Generator
 # Create your views here.
 modulePath = os.path.dirname(__file__)
 Dengue_model = pickle.load(open(os.path.join(modulePath, 'MLmodels/Dengue/Dengue.sav'), 'rb'))
 Chikungunya_model = pickle.load(open(os.path.join(modulePath, 'MLmodels/Chikungunya/Chikungunya.sav'), 'rb'))
-
-
-def generate_report_description(report,disease):
-    desc = ''
-    if report.chances >= 75:
-        desc += f'According to our system you have very high chances of having {disease}. ' \
-                  'You must consult your nearby healthcare institue or doctor as soon as possible and take steps' \
-                  'according to he/she says. '
-    elif 50 <= report.chances < 75:
-        desc += f'According to our system you have chances of having {disease}. ' \
-                  'No need to fear or panic a lot. ' \
-                  'Please consult your nearby healthcare institue or doctor as soon as possible for proper reports ' \
-                  'and testsand take steps according to he/she says. '
-    elif 35 <= report.chances < 50:
-        desc += f'According to our system you have low chances of having {disease}. ' \
-                  f'No need to fear or panic a lot. You are looking fine with less effective symptoms of {disease}. ' \
-                  'But if you are not feeling well then please consult your nearby healthcare institue or ' \
-                  'doctor as soon as possible for proper reports and testsand take steps according to he/she says. '
-    else:
-        desc += f'According to our system you are safe from {disease}. You are looking fine with less ' \
-                  f'effective symptoms of {disease}. You might have a normal flue so no need to have high tensisons '
-    symptoms = report.symptoms.split(',')
-    s_count = len(symptoms)
-    desc += f' You face {s_count} ' \
-            f'recognized symptoms of {report.type} which are {report.symptoms}. ' \
-            f'According to our system you have {report.chances}% chance of being ' \
-            f'affected of {report.type}. '
-    return desc
+General_model = pickle.load(open(os.path.join(modulePath, 'MLmodels/General/General.sav'), 'rb'))
+Covid_model = pickle.load(open(os.path.join(modulePath, 'MLmodels/Covid/Covid.sav'), 'rb'))
+Malaria_model = pickle.load(open(os.path.join(modulePath, 'MLmodels/Malaria/Malaria.sav'), 'rb'))
 
 
 class DengueView(APIView):
@@ -57,14 +33,7 @@ class DengueView(APIView):
                 per = 100
             else:
                 per = int(str(per)[2:4])
-            if per >= 75:
-                result = 'Very high dengue positive chances.'
-            elif 50 <= per < 75:
-                result = 'High dengue positive chances'
-            elif 35 <= per < 50:
-                result = 'Low dengue positive chances'
-            else:
-                result = 'Safe from dengue'
+            result = generate_result(per, 'dengue')
             srdata = {
                 'user': request.data['user'],
                 'symptoms': request.data['symptoms'],
@@ -109,14 +78,7 @@ class ChikungunyaView(APIView):
                 per = 100
             else:
                 per = int(str(per)[2:4])
-            if per >= 75:
-                result = 'Very high chikungunya positive chances.'
-            elif 50 <= per < 75:
-                result = 'High chikungunya positive chances'
-            elif 35 <= per < 50:
-                result = 'Low chikungunya positive chances'
-            else:
-                result = 'Safe from chikungunya'
+            result = generate_result(per, 'chikungunya')
             srdata = {
                 'user': request.data['user'],
                 'symptoms': request.data['symptoms'],
@@ -134,6 +96,148 @@ class ChikungunyaView(APIView):
                     'type':'chikungunya',
                     'result': report.result,
                     'description': generate_report_description(report,'chikungunya'),
+                }
+                return Response(data)
+            else:
+                err = {
+                    'Error': serializer.errors
+                }
+                return Response(err)
+        except Exception as e:
+            err = {
+                    'Error': 'server error',
+                }
+            return Response(err)
+
+
+class GeneralView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        try:
+            symps = json.loads(request.data['symptoms'])
+            per = General_model.predict_proba(
+                [[symps['fever'], symps['rashes'], symps['bleeding'],
+                  symps['jointpain'], symps['vomiting'], symps['swelling'],
+                  symps['cough'], symps['shivering'], symps['respiratory'],
+                  symps['lossofsmell'], symps['sorethroat'], symps['days']]])
+            per = np.array(per)[0][1]
+            if per == 1.:
+                per = 100
+            else:
+                per = int(str(per)[2:4])
+            result, desc = general_Result_Generator(per)
+            srdata = {
+                'user': request.data['user'],
+                'symptoms': request.data['symptoms'],
+                'date': request.data['date'],
+                'type': 'general',
+                'result': result,
+                'chances': per,
+            }
+            serializer = TestSerializer(data=srdata)
+            if serializer.is_valid():
+                report = serializer.save()
+                data = {
+                    'fname': report.user.fname,
+                    'email': report.user.email,
+                    'type':'General',
+                    'result': report.result,
+                    'description': desc,
+                }
+                return Response(data)
+            else:
+                err = {
+                    'Error': serializer.errors
+                }
+                return Response(err)
+        except Exception as e:
+            err = {
+                    'Error': 'server error',
+                }
+            return Response(err)
+
+
+class CovidView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        try:
+            symps = json.loads(request.data['symptoms'])
+            per = Covid_model.predict_proba(
+                [[symps['fever'], symps['cough'], symps['respiratory'],
+                  symps['heartrate'], symps['pain'], symps['lossofsmell'],
+                  symps['chronic'], symps['days']]])
+            per = np.array(per)[0][1]
+            if per == 1.:
+                per = 100
+            else:
+                per = int(str(per)[2:4])
+            result = generate_result(per, 'covid')
+            srdata = {
+                'user': request.data['user'],
+                'symptoms': request.data['symptoms'],
+                'date': request.data['date'],
+                'type': 'covid',
+                'result': result,
+                'chances': per,
+            }
+            serializer = TestSerializer(data=srdata)
+            if serializer.is_valid():
+                report = serializer.save()
+                data = {
+                    'fname': report.user.fname,
+                    'email': report.user.email,
+                    'type':'covid',
+                    'result': report.result,
+                    'description': generate_report_description(report,'covid'),
+                }
+                return Response(data)
+            else:
+                err = {
+                    'Error': serializer.errors
+                }
+                return Response(err)
+        except Exception as e:
+            err = {
+                    'Error': 'server error',
+                }
+            return Response(err)
+
+
+class MalariaView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        try:
+            symps = json.loads(request.data['symptoms'])
+            per = Malaria_model.predict_proba(
+                [[symps['fever'], symps['headache'], symps['shivering'],
+                  symps['vomitting'], symps['cough'], symps['respiratory'], symps['fastheartrate'], symps['fatigue'],
+                  symps['chronic'], symps['days']]])
+            per = np.array(per)[0][1]
+            if per == 1.:
+                per = 100
+            else:
+                per = int(str(per)[2:4])
+            result = generate_result(per, 'malaria')
+            srdata = {
+                'user': request.data['user'],
+                'symptoms': request.data['symptoms'],
+                'date': request.data['date'],
+                'type': 'malaria',
+                'result': result,
+                'chances': per,
+            }
+            serializer = TestSerializer(data=srdata)
+            if serializer.is_valid():
+                report = serializer.save()
+                data = {
+                    'fname': report.user.fname,
+                    'email': report.user.email,
+                    'type':'malaria',
+                    'result': report.result,
+                    'description': generate_report_description(report,'malaria'),
                 }
                 return Response(data)
             else:
