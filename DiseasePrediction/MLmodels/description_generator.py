@@ -75,6 +75,7 @@ def generate_result(per, disease):
 
 def general_Result_Generator(res):
     desc = ''
+    print(res)
     if int(res) == 1:
         msg = 'Normal flue'
         desc = 'You may have normal flue and if you are not feeling extremely well then consult your nearby doctor'

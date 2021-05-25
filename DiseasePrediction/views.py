@@ -46,6 +46,8 @@ class DengueView(APIView):
             if serializer.is_valid():
                 report = serializer.save()
                 data = {
+                    'fname': report.user.fname,
+                    'email': report.user.email,
                     'type': 'dengue',
                     'result': report.result,
                     'description': generate_report_description(report,'dengue'),
@@ -116,16 +118,12 @@ class GeneralView(APIView):
     def post(self, request):
         try:
             symps = json.loads(request.data['symptoms'])
-            per = General_model.predict_proba(
+            per = General_model.predict(
                 [[symps['fever'], symps['rashes'], symps['bleeding'],
                   symps['jointpain'], symps['vomiting'], symps['swelling'],
                   symps['cough'], symps['shivering'], symps['respiratory'],
                   symps['lossofsmell'], symps['sorethroat'], symps['days']]])
-            per = np.array(per)[0][1]
-            if per == 1.:
-                per = 100
-            else:
-                per = int(str(per)[2:4])
+            per = per[0]
             result, desc = general_Result_Generator(per)
             srdata = {
                 'user': request.data['user'],
@@ -145,16 +143,19 @@ class GeneralView(APIView):
                     'result': report.result,
                     'description': desc,
                 }
+                print(data)
                 return Response(data)
             else:
                 err = {
                     'Error': serializer.errors
                 }
+                print(serializer.errors)
                 return Response(err)
         except Exception as e:
             err = {
                     'Error': 'server error',
                 }
+            print(err)
             return Response(err)
 
 
@@ -213,7 +214,7 @@ class MalariaView(APIView):
             symps = json.loads(request.data['symptoms'])
             per = Malaria_model.predict_proba(
                 [[symps['fever'], symps['headache'], symps['shivering'],
-                  symps['vomitting'], symps['cough'], symps['respiratory'], symps['fastheartrate'], symps['fatigue'],
+                  symps['vomiting'], symps['cough'], symps['respiratory'], symps['fastheartrate'], symps['fatigue'],
                   symps['chronic'], symps['days']]])
             per = np.array(per)[0][1]
             if per == 1.:
@@ -249,4 +250,5 @@ class MalariaView(APIView):
             err = {
                     'Error': 'server error',
                 }
+            print(e)
             return Response(err)

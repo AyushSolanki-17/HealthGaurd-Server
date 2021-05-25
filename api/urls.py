@@ -10,4 +10,5 @@ urlpatterns = [
     path('token/revoke/', views.RevokeTokenApi.as_view(), name='revoke'),
     path('register/doctor/', views.DoctorRegisterApi.as_view(), name='doctor_register'),
     path('tests/', include('DiseasePrediction.urls', namespace='tests')),
+    path('appointment/', include('Appointments.urls', namespace='appointments')),
 ]

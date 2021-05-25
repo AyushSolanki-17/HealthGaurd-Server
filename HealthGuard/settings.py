@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'MainWebApp.apps.MainwebappConfig',
     'api.apps.ApiConfig',
     'DiseasePrediction.apps.DiseasepredictionConfig',
+    'Appointments.apps.AppointmentsConfig',
     'rest_framework',
     'oauth2_provider',
 ]

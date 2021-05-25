@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import (BaseUserManager, AbstractBaseUser, PermissionsMixin, Group)
 
-
 class HealthGuardUserManager(BaseUserManager):
     def create_user(self, email, fname, mobile, gender, dob, password=None):
         """
@@ -137,4 +136,6 @@ class HealthGuardDoctor(models.Model):
 
     class Meta:
         db_table = 'Doctors'
+
+
 
